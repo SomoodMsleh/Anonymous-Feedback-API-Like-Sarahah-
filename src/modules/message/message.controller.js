@@ -99,3 +99,14 @@ export const reportOffensiveMessage = async (req, res, next) => {
     await message.save();
     return res.status(200).json({ message: "Message is reported successfully" });
 };
+
+export const getAllReportedMessages = async (req, res, next) => {
+    const reportedMessages = await MessageModel.findAll({
+        where: { is_reported: true },
+        attributes: ['id','receiver_id', 'content', 'createdAt']
+    });
+    if(!reportedMessages){
+        return next(new AppError("No reported messages", 404));
+    }
+    return res.status(200).json({ message : "Successfully",reportedMessages });
+};

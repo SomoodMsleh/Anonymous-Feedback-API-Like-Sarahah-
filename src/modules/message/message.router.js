@@ -2,7 +2,7 @@ import { Router } from "express";
 import {asyncHandler} from "../../utils/catchError.js"
 import validation from "../../middleware/validation.js";
 import auth from "../../middleware/auth.js"
-import { sendMessage,getReceivedMessages,deleteMessage,markMessageAsRead,getUnreadMessages,getAllMessages,reportOffensiveMessage} from "./message.controller.js";
+import { sendMessage,getReceivedMessages,deleteMessage,markMessageAsRead,getUnreadMessages,getAllMessages,reportOffensiveMessage,getAllReportedMessages} from "./message.controller.js";
 import { sendMessageSchema,deleteMessageSchema,markMessageAsReadSchema ,reportOffensiveMessageSchema} from "./message.validation.js";
 const router = Router();
 
@@ -13,5 +13,6 @@ router.put("/read/:id", auth(["user",'Admin']),validation(markMessageAsReadSchem
 router.get('/getUnreadMessages',auth(['user','Admin']),asyncHandler(getUnreadMessages));
 router.get("/getAllMessages", auth(["Admin"]), asyncHandler(getAllMessages));
 router.put("/report/:id", auth(["user",'Admin']),validation(reportOffensiveMessageSchema),asyncHandler(reportOffensiveMessage));
+router.get('/ReportedMessages', auth(['Admin']), asyncHandler(getAllReportedMessages));
 
 export default router;
