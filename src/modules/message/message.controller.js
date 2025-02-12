@@ -110,3 +110,15 @@ export const getAllReportedMessages = async (req, res, next) => {
     }
     return res.status(200).json({ message : "Successfully",reportedMessages });
 };
+
+export const getReportDetails = async (req, res, next) => {
+    const {id} = req.params;
+    const message = await MessageModel.findOne({
+        where: { id:id, is_reported: true },
+        attributes: ['id', 'receiver_id', 'content', 'createdAt']
+    });
+    if (!message) {
+        return next(new AppError("Report not found", 404));
+    }
+    return res.status(200).json({ message : "Successfully, report message details",message });
+};

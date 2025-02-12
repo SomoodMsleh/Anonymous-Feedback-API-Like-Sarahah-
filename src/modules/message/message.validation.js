@@ -17,6 +17,6 @@ export const reportOffensiveMessageSchema = Joi.object({
     id:Joi.number().min(1).required()
 });
 
-/**export const Schema = Joi.object({
+export const getReportDetailsSchema = Joi.object({
     id:Joi.number().min(1).required()
-});*/
+});
