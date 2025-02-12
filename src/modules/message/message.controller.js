@@ -29,3 +29,16 @@ export const getReceivedMessages = async(req,res,next)=>{
     return res.status(200).json({message:"Messages is received successfully",messages});
 };
 
+export const deleteMessage = async(req,res,next)=>{
+    const { id } = req.params;
+    const receiver_id = req.id; 
+    const message = await MessageModel.findByPk(id);
+    if (!message) {
+        return next(new AppError("Message not found or receiver mismatch", 404));
+    }
+    if (message.receiver_id === receiver_id || req.role === "Admin") {
+        await MessageModel.destroy({ where: { id: id } });
+        return res.status(200).json({ message: "Message deleted successfully" });
+    }
+    return next(new AppError("You are not authorized to delete this message", 403));
+}

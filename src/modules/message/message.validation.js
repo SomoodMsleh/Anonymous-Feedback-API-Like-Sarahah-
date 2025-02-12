@@ -5,7 +5,9 @@ export const sendMessageSchema = Joi.object({
     content:Joi.string().min(10).required()
 });
 
-
+export const deleteMessageSchema = Joi.object({
+    id:Joi.number().min(1).required()
+});
 
 /**export const Schema = Joi.object({
     id:Joi.number().min(1).required()
