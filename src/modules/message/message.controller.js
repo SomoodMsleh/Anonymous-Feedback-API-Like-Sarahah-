@@ -58,3 +58,16 @@ export const markMessageAsRead = async (req, res, next) => {
     await message.save();
     return res.status(200).json({ message: "Message marked as read successfully" });
 };
+
+export const getUnreadMessages = async (req, res, next) => {
+    const receiver_id = req.id;
+    const messages = await MessageModel.findAll({
+        where: { receiver_id:receiver_id, is_read: false }, 
+        attributes: ["id","content", "createdAt"],
+        order: [["createdAt", "DESC"]],
+    });
+    if(!messages){
+        return next(new AppError("You don't have any unread message", 404));
+    }
+    return res.status(200).json({message:"You have unread Messages",messages});
+};
