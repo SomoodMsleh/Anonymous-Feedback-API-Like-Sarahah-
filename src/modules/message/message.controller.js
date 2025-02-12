@@ -83,3 +83,19 @@ export const getAllMessages = async (req, res, next) => {
     return res.status(200).json({ message:"Successfully", messages });
 };
 
+export const reportOffensiveMessage = async (req, res, next) => {
+    const {id} = req.params;
+    const receiver_id = req.id;
+    const message = await MessageModel.findOne({
+        where: { id:id, receiver_id:receiver_id}
+    });
+    if (!message) {
+        return next(new AppError("Message not found or unauthorized access", 404));
+    }
+    if(message.is_reported){
+        return next(new AppError("The message has been reported previously.", 400));
+    }
+    message.is_reported = true;
+    await message.save();
+    return res.status(200).json({ message: "Message is reported successfully" });
+};
