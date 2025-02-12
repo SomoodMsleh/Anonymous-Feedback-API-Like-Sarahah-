@@ -71,3 +71,15 @@ export const getUnreadMessages = async (req, res, next) => {
     }
     return res.status(200).json({message:"You have unread Messages",messages});
 };
+
+export const getAllMessages = async (req, res, next) => {
+    const messages = await MessageModel.findAll({
+        attributes: ["id", "receiver_id", "content", "is_read", "is_reported", "createdAt"],
+        order: [["createdAt", "DESC"]],
+    });
+    if(!messages){
+        return next(new AppError("not found any messages", 404));
+    }
+    return res.status(200).json({ message:"Successfully", messages });
+};
+
