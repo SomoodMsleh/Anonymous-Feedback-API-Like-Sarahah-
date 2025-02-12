@@ -6,6 +6,7 @@ import { Op } from "sequelize";
 
 export const deactivateUser = async(req,res,next)=>{
     const {id} = req.params;
+    const user_ID = req.id;
     const user = await UserModel.findByPk(id);
     if(user == null){
         return next(new AppError("user not found",404));
@@ -14,13 +15,18 @@ export const deactivateUser = async(req,res,next)=>{
     if (!user.is_active) {
         return next(new AppError("User is already deactivated",400));
     }
-    user.is_active = false;
-    await user.save();
-    return res.status(200).json({message:"User deactivated successfully"});
+    if (user.id === user_ID || req.role === "Admin") {
+        user.is_active = false;
+        await user.save();
+        return res.status(200).json({message:"User deactivated successfully"});
+    }
+    return next(new AppError("You are not authorized to deactivate this account", 403));
+
 };
 
 export const reactivateUser = async(req,res,next)=>{
     const {id} = req.params;
+    const user_ID = req.id;
     const user = await UserModel.findByPk(id);
     if(user == null){
         return next(new AppError("user not found",404));
@@ -29,9 +35,13 @@ export const reactivateUser = async(req,res,next)=>{
     if (user.is_active) {
         return next(new AppError("User is already activated",400));
     }
-    user.is_active = true;
-    await user.save();
-    return res.status(200).json({message:"User reactivated successfully"});
+    if (user.id === user_ID || req.role === "Admin") {
+        user.is_active = true;
+        await user.save();
+        return res.status(200).json({message:"User reactivated successfully"});
+    }
+    return next(new AppError("You are not authorized to reactivate this account", 403));
+    
 };
 
 export const searchUser = async(req,res,next)=>{
