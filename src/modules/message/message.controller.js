@@ -41,4 +41,20 @@ export const deleteMessage = async(req,res,next)=>{
         return res.status(200).json({ message: "Message deleted successfully" });
     }
     return next(new AppError("You are not authorized to delete this message", 403));
-}
+};
+
+export const markMessageAsRead = async (req, res, next) => {
+    const {id} = req.params;
+    const receiver_id = req.id;
+    const message = await MessageModel.findByPk(id);
+
+    if (!message) {
+        return next(new AppError("Message not found", 404));
+    }
+    if (message.receiver_id !== receiver_id) {
+        return next(new AppError("You are not authorized to update this message", 403));
+    }
+    message.is_read = true;
+    await message.save();
+    return res.status(200).json({ message: "Message marked as read successfully" });
+};

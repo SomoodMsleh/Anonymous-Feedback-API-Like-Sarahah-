@@ -9,6 +9,10 @@ export const deleteMessageSchema = Joi.object({
     id:Joi.number().min(1).required()
 });
 
+export const markMessageAsReadSchema = Joi.object({
+    id:Joi.number().min(1).required()
+});
+
 /**export const Schema = Joi.object({
     id:Joi.number().min(1).required()
 });*/
