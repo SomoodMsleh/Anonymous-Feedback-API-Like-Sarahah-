@@ -16,3 +16,16 @@ export const sendMessage = async(req,res,next)=>{
     return res.status(201).json({ message: "Message sent successfully",message});
 };
 
+export const getReceivedMessages = async(req,res,next)=>{
+    const user_id = req.id;
+    const messages = await MessageModel.findAll({
+        where: { receiver_id: user_id },
+        attributes: ["id", "content", "is_read", "is_reported", "createdAt"],
+        order: [["createdAt", "DESC"]]
+    });
+    if(!messages){
+        return next(new AppError("You don't receive any message", 404));
+    }
+    return res.status(200).json({message:"Messages is received successfully",messages});
+};
+
