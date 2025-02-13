@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 export const sequelize = new Sequelize('freedb_AnonymousFeedbackApp', 'freedb_somood1', 'XT9bS?FkeWgkHxC', {
     host: 'sql.freedb.tech',
-    port:330,
+    port:3306,
     dialect: 'mysql' /*  'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
 });
 
