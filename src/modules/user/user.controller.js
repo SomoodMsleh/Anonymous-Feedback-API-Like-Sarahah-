@@ -3,6 +3,8 @@ import { AppError } from "../../utils/AppError.js";
 import bcryptjs from "bcryptjs";
 import cloudinary from "../../utils/cloudinary.js"
 import { Op } from "sequelize"; 
+import dotenv from "dotenv";
+dotenv.config();
 
 export const deactivateUser = async(req,res,next)=>{
     const {id} = req.params;
@@ -75,7 +77,7 @@ export const changePassword = async(req,res,next)=>{
     if(check == false){
         return next(new AppError("Incorrect old password",400));
     }
-    const hashPassword = bcryptjs.hashSync(newPassword,8);
+    const hashPassword = bcryptjs.hashSync(newPassword,parseInt(process.env.HASH_SALT));
     user.password = hashPassword;
     await user.save();
     return res.status(200).json({message:"Password updated successfully"});
