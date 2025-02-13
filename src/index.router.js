@@ -7,6 +7,9 @@ const initApp = (app,express)=>{
     connectDB();
     app.use(express.json());
     app.use(cors());
+    app.get('/',(req,res)=>{
+        return res.status(200).json({ message: "Welcome"});
+    });
     app.use('/auth',authRouter);
     app.use('/user',userRouter);
     app.use('/Message',MessageRouter);
