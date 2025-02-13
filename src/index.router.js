@@ -11,7 +11,7 @@ const initApp = (app,express)=>{
     app.use('/user',userRouter);
     app.use('/Message',MessageRouter);
     app.get('*',(req,res)=>{
-        return res.status(404).json({ message: "page not found"});
+        return res.status(404).json({ message: "Page Not Found"});
     });
     app.use((error,req,res,next)=>{
         return res.status(error.statusCode).json({message : error.message});
