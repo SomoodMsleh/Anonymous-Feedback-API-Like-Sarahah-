@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUsers,getInactiveUser,getDeactivateUser,deleteUser,changePassword,uploadProfilePicture,deactivateUser,reactivateUser,searchUser} from "./user.controller.js";
+import { getUsers,getInactiveUser,getDeactivateUser,deleteUser,changePassword,uploadProfilePicture,deactivateUser,reactivateUser,updateUserRole,searchUser} from "./user.controller.js";
 import {asyncHandler} from "../../utils/catchError.js"
 import validation from "../../middleware/validation.js";
 import auth from "../../middleware/auth.js"
@@ -16,4 +16,5 @@ router.put("/uploadProfilePicture/:id",auth(['Admin','user']),validation(uploadP
 router.put('/deactivateUser/:id',auth(['user','Admin']),validation(deactivateUserSchema),deactivateUser);
 router.put('/reactivateUser/:id',auth(['user','Admin']),validation(reactivateUserSchema),reactivateUser);
 router.post('/searchUser',auth(['user','Admin']),validation(searchUserSchema),searchUser);
+router.put("/updateUserRole/:id", auth(["Admin"]), asyncHandler(updateUserRole));
 export default router;

@@ -56,7 +56,7 @@ export const searchUser = async(req,res,next)=>{
             },
             is_active: true // Only active users
         },
-        attributes: ["id", "userName", "email", "profile_url", "role"]
+        attributes: ["id", "userName","profile_url"]
     });
     if (users.length === 0) {
         return next(new AppError("No active users found",404));
@@ -120,4 +120,18 @@ export const getInactiveUser = async(req,res)=>{
 export const getDeactivateUser = async(req,res)=>{
     const users = await UserModel.findAll({where:{is_active: false},attributes:['userName','email','profile_url','role']});
     return res.status(200).json({message:"successfully", users});
+};
+
+export const updateUserRole = async (req, res, next) => {
+    const { id } = req.params;
+    const user = await UserModel.findByPk(id);
+    if (!user) {
+        return next(new AppError("User not found", 404));
+    }
+    if (user.role === "Admin") {
+        return next(new AppError("User is already an Admin", 400));
+    }
+    user.role = "Admin";
+    await user.save();
+    return res.status(200).json({ message: "User role updated to Admin successfully" });
 };
